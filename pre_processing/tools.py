@@ -1,10 +1,42 @@
 import numpy as np
+from scipy import signal
+import pandas as pd
 import copy
 
-def smooth_convolution(data, smoothing_coefficient):
+def smooth_convolution(data, smoothing_coefficient=1):
 	box = np.ones(smoothing_coefficient)/smoothing_coefficient
 	data_copy = {}
 	for key in data:
+		if key == 'time':
+			continue
 		data_copy[key] = np.convolve(data[key], box, mode='same')
 	return data_copy
 
+def savitzky_golay_filter(data, smoothing_coefficient=1):
+	window = smoothing_coefficient
+	order = 5
+	data_copy = {}
+	for key in data:
+		if key == 'time':
+			continue
+		data_copy[key] = signal.savgol_filter(data[key], window, order)
+	return data_copy
+
+def rolling_window(data, smoothing_coefficient=1):
+	data_copy = {}
+	for key in data:
+		if key == 'time':
+			continue
+		data_copy[key] = pd.Series(data[key]).rolling(window=smoothing_coefficient).mean()
+	return data_copy
+
+def double_digital_filter(data, smoothing_coefficient=1):
+	N  = 3    # Filter order
+	Wn = 0.1  # Cutoff frequency
+	sos = signal.butter(N, Wn, output='sos')
+	data_copy = {}
+	for key in data:
+		if key == 'time':
+			continue
+		data_copy[key] = signal.sosfiltfilt(sos, data[key])
+	return data_copy
