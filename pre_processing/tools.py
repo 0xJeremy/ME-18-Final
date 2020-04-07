@@ -30,9 +30,9 @@ def rolling_window(data, smoothing_coefficient=1):
 		data_copy[key] = pd.Series(data[key]).rolling(window=smoothing_coefficient).mean()
 	return data_copy
 
-def double_digital_filter(data, smoothing_coefficient=1):
-	N  = 3    # Filter order
-	Wn = 0.1  # Cutoff frequency
+def double_digital_filter(data, order=3, cutoff=0.1):
+	N  = order    # Filter order
+	Wn = cutoff   # Cutoff frequency
 	sos = signal.butter(N, Wn, output='sos')
 	data_copy = {}
 	for key in data:
