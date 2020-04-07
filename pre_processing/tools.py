@@ -14,7 +14,7 @@ def smooth_convolution(data, smoothing_coefficient=1):
 
 def savitzky_golay_filter(data, smoothing_coefficient=1):
 	window = smoothing_coefficient
-	order = 5
+	order = 3
 	data_copy = {}
 	for key in data:
 		if key == 'time':
