@@ -46,7 +46,7 @@ def plot_gyroscope(raw, modified=None, s=1, t=1):
 	return axs
 
 def plot_all(raw, modified=None, s=1, t=1):
-	x = [i for i in range(len(raw['Gx']))]
+	x = [i for i in range(len(raw['Ax']))]
 	fig, axs = plt.subplots(2, 3)
 
 	axs[0, 0].set_title('Acceleration Ax')
@@ -80,3 +80,17 @@ def plot_all(raw, modified=None, s=1, t=1):
 	plt.show()
 
 	return axs
+
+def plot_column(data, column, s=1, t=1, line=False):
+	if 'time' in data.keys():
+		x = data['time']
+	else:
+		x = [i for i in range(len(data[column]))]
+
+	plt.title('Plotting Column {}'.format(column))
+	plt.scatter(x, data[column], color='blue', s=s)
+	if line:
+		plt.plot(x, data[column], color='orange', linewidth=t)
+
+	plt.tight_layout()
+	plt.show()
