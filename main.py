@@ -11,7 +11,9 @@ from pre_processing.tools import rolling_window
 from pre_processing.tools import double_digital_filter
 
 from post_processing.tools import add_accumulation_column
+from post_processing.tools import add_time_accumulation_column
 from post_processing.tools import double_accumulation
+from post_processing.tools import double_time_accumulation
 
 ####################
 ### DATA LOADING ###
@@ -26,7 +28,6 @@ data = add_time_differential(data)
 ### DATA PRE-PROCESSING ###
 ###########################
 
-
 smoothed = smooth_convolution(data, smoothing_coefficient=10)
 # smoothed = savitzky_golay_filter(data, smoothing_coefficient=5)
 # smoothed = rolling_window(data, smoothing_coefficient=100)
@@ -37,17 +38,12 @@ smoothed = smooth_convolution(data, smoothing_coefficient=10)
 ### DATA POST-PROCESSING ###
 ############################
 
-smoothed = double_accumulation(smoothed, 'Ay', 'i_Ay', 'ii_Ay')
-
+smoothed = double_time_accumulation(smoothed, 'Ay', 'i_Ay', 'ii_Ay')
 
 #########################
 ### DATA VISUALZATION ###
 #########################
 
-
 plot_accelerometer(data, smoothed)
 
 plot_column(smoothed, 'ii_Ay')
-
-
-
