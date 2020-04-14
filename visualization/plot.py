@@ -19,6 +19,9 @@ def plot_accelerometer(raw, modified=None, s=1, t=1):
 		axs[2].plot(x, modified['Az'], color='orange', linewidth=t)
 
 	plt.tight_layout()
+	axs[0].grid(True, linewidth=0.1)
+	axs[1].grid(True, linewidth=0.1)
+	axs[2].grid(True, linewidth=0.1)
 
 	return axs
 
@@ -40,6 +43,10 @@ def plot_gyroscope(raw, modified=None, s=1, t=1):
 		axs[2].plot(x, modified['Gz'], color='orange', linewidth=t)
 
 	plt.tight_layout()
+	plt.grid(True, linewidth=0.1)
+	axs[0].grid(True, linewidth=0.1)
+	axs[1].grid(True, linewidth=0.1)
+	axs[2].grid(True, linewidth=0.1)
 
 	return axs
 
@@ -75,6 +82,12 @@ def plot_all(raw, modified=None, s=1, t=1):
 		axs[1, 2].plot(x, modified['Gz'], color='orange', linewidth=t)
 
 	plt.tight_layout()
+	axs[0, 0].grid(True, linewidth=0.1)
+	axs[0, 1].grid(True, linewidth=0.1)
+	axs[0, 2].grid(True, linewidth=0.1)
+	axs[1, 0].grid(True, linewidth=0.1)
+	axs[1, 1].grid(True, linewidth=0.1)
+	axs[1, 2].grid(True, linewidth=0.1)
 
 	return axs
 
@@ -85,11 +98,14 @@ def plot_column(data, column, s=1, t=1, line=False):
 		x = [i for i in range(len(data[column]))]
 	fig, axs = plt.subplots(1)
 	axs.set_title('Plotting Column {}'.format(column))
+	plt.xlabel("Time")
+	plt.ylabel("Magnitude")
 	axs.scatter(x, data[column], color='blue', s=s)
 	if line:
 		axs.plot(x, data[column], color='orange', linewidth=t)
 
 	plt.tight_layout()
+	plt.grid(True, linewidth=0.1)
 
 	return axs
 
