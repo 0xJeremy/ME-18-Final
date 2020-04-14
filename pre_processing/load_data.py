@@ -31,9 +31,9 @@ def get_file_metadata(filename):
 	f = filename.replace('.csv', '').split('_')
 	return {
 		'date': f[0],
-		'distance': f[1]/100,
+		'distance': int(f[1])/100,
 		'speed': f[2],
-		'trial': f[3]
+		'trial': int(f[3])
 	}
 
 def cut_data(data, start, end):

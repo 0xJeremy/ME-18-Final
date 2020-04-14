@@ -40,3 +40,5 @@ def double_digital_filter(data, order=3, cutoff=0.1):
 			continue
 		data_copy[key] = signal.sosfiltfilt(sos, data[key])
 	return data_copy
+
+# Investigate https://en.wikipedia.org/wiki/Finite_impulse_response
