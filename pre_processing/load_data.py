@@ -1,5 +1,6 @@
-import csv
 from os import walk
+import csv
+import copy
 
 def get_csv_list(path):
 	files = []
@@ -30,13 +31,13 @@ def get_file_metadata(filename):
 	f = filename.replace('.csv', '').split('_')
 	return {
 		'date': f[0],
-		'distance': f[1],
+		'distance': f[1]/100,
 		'speed': f[2],
 		'trial': f[3]
 	}
 
-def remove_gravity_bias(data):
+def cut_data(data, start, end):
 	data_copy = copy.deepcopy(data)
-	for i in range(len(data_copy['Az'])):
-		data_copy['Az'][i] -= 9.81
+	for key in data_copy.keys():
+		data_copy[key] = data_copy[key][start:end]
 	return data_copy

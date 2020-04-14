@@ -91,15 +91,25 @@ def plot_all(raw, modified=None, s=1, t=1):
 
 	return axs
 
-def plot_column(data, column, s=1, t=1, line=False):
+def plot_column(data, column, s=1, t=1, line=False, type=None):
 	if 'time' in data.keys():
 		x = data['time']
 	else:
 		x = [i for i in range(len(data[column]))]
 	fig, axs = plt.subplots(1)
-	axs.set_title('Plotting Column {}'.format(column))
+
 	plt.xlabel("Time")
-	plt.ylabel("Magnitude")
+	if type == 'velocity':
+		axs.set_title("Velocity ({})".format(column[-1]))
+		plt.ylabel("Velocity (m/s)")
+	if type == 'position':
+		axs.set_title("Position ({})".format(column[-1]))
+		plt.ylabel("Position (m)")
+	else:
+		axs.set_title('Plotting Column {}'.format(column))
+		plt.xlabel("Time")
+		plt.ylabel("Magnitude")
+
 	axs.scatter(x, data[column], color='blue', s=s)
 	if line:
 		axs.plot(x, data[column], color='orange', linewidth=t)
