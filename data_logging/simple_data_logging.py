@@ -26,7 +26,7 @@ def main():
 	filename = input('Enter the filename to save the data to: ')
 	print('Enter duration and smpling rate in seconds, data/sec.')
 	req = input('Separate by space: (default 10 sec, ~ 125 Hz) ')
-	filename = '../data/0407_1d_1/' + filename + '.csv' 
+	filename = '../data/0414_1d_1/' + filename + '.csv' 
 	# filename = filename + '.csv'
 	if len(req) == 0:
 		dur = 10
