@@ -19,7 +19,6 @@ def plot_accelerometer(raw, modified=None, s=1, t=1):
 		axs[2].plot(x, modified['Az'], color='orange', linewidth=t)
 
 	plt.tight_layout()
-	plt.show()
 
 	return axs
 
@@ -41,7 +40,6 @@ def plot_gyroscope(raw, modified=None, s=1, t=1):
 		axs[2].plot(x, modified['Gz'], color='orange', linewidth=t)
 
 	plt.tight_layout()
-	plt.show()
 
 	return axs
 
@@ -77,7 +75,6 @@ def plot_all(raw, modified=None, s=1, t=1):
 		axs[1, 2].plot(x, modified['Gz'], color='orange', linewidth=t)
 
 	plt.tight_layout()
-	plt.show()
 
 	return axs
 
@@ -86,11 +83,16 @@ def plot_column(data, column, s=1, t=1, line=False):
 		x = data['time']
 	else:
 		x = [i for i in range(len(data[column]))]
-
-	plt.title('Plotting Column {}'.format(column))
-	plt.scatter(x, data[column], color='blue', s=s)
+	fig, axs = plt.subplots(1)
+	axs.set_title('Plotting Column {}'.format(column))
+	axs.scatter(x, data[column], color='blue', s=s)
 	if line:
-		plt.plot(x, data[column], color='orange', linewidth=t)
+		axs.plot(x, data[column], color='orange', linewidth=t)
 
+	plt.tight_layout()
+
+	return axs
+
+def show_plot():
 	plt.tight_layout()
 	plt.show()

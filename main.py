@@ -2,6 +2,7 @@ from visualization.plot import plot_all
 from visualization.plot import plot_accelerometer
 from visualization.plot import plot_gyroscope
 from visualization.plot import plot_column
+from visualization.plot import show_plot
 
 from pre_processing.load_data import load_file_to_dict
 from pre_processing.load_data import add_time_differential
@@ -46,4 +47,7 @@ smoothed = double_time_accumulation(smoothed, 'Ay', 'i_Ay', 'ii_Ay')
 
 plot_accelerometer(data, smoothed)
 
+plot_column(smoothed, 'i_Ay')
 plot_column(smoothed, 'ii_Ay')
+
+show_plot()
