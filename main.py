@@ -12,6 +12,7 @@ from pre_processing.load_data import get_file_metadata
 from pre_processing.load_data import cut_data
 from pre_processing.zeroing import remove_gravity_bias
 from pre_processing.zeroing import remove_all_bias
+from pre_processing.zeroing import invert
 from pre_processing.tools import smooth_convolution
 from pre_processing.tools import savitzky_golay_filter
 from pre_processing.tools import rolling_window
@@ -27,27 +28,35 @@ from post_processing.tools import double_time_accumulation
 ####################
 
 ROWS = ['Ax', 'Ay', 'Az', 'time']
-PATH = 'data/0407_1d_1/'
-# FILE = '0407_40_fast_3.csv'
-FILE = '0407_20_slow_2.csv'
+META = [
+	('date', str),
+	('d1', int),
+	('d2', int),
+	('d3', int),
+	('d4', int),
+	('speed', str),
+	('trial', int)
+]
+PATH = 'data/0414_1d_1/'
+FILE = '0414_0_20_40_60_fast_1.csv'
 
 data = load_file_to_dict('{}{}'.format(PATH, FILE), ROWS)
-meta = get_file_metadata(FILE)
+meta = get_file_metadata(FILE, META)
 data = add_time_differential(data)
 
-# data = cut_data(data, 200, 900)
+# data = cut_data(data, 0, 900)
 
 data = remove_all_bias(data, 'Ax')
 data = remove_all_bias(data, 'Ay')
 data = remove_all_bias(data, 'Az')
 
-
+# data = invert(data, 'Ax')
 
 ###########################
 ### DATA PRE-PROCESSING ###
 ###########################
 
-smoothed = smooth_convolution(data, smoothing_coefficient=3)
+smoothed = smooth_convolution(data, smoothing_coefficient=2)
 # smoothed = savitzky_golay_filter(data, smoothing_coefficient=5)
 # smoothed = rolling_window(data, smoothing_coefficient=100)
 # smoothed = double_digital_filter(data, cutoff=0.1)
@@ -56,9 +65,9 @@ smoothed = smooth_convolution(data, smoothing_coefficient=3)
 ### DATA POST-PROCESSING ###
 ############################
 
-x = double_time_accumulation(smoothed, 'Ax', 'i_Ax', 'ii_Ax')
-y = double_time_accumulation(x, 'Ay', 'i_Ay', 'ii_Ay')
-z = double_time_accumulation(y, 'Az', 'i_Az', 'ii_Az')
+smoothed = double_time_accumulation(smoothed, 'Ax', 'i_Ax', 'ii_Ax')
+smoothed = double_time_accumulation(smoothed, 'Ay', 'i_Ay', 'ii_Ay')
+smoothed = double_time_accumulation(smoothed, 'Az', 'i_Az', 'ii_Az')
 
 #########################
 ### DATA VISUALZATION ###
@@ -66,8 +75,8 @@ z = double_time_accumulation(y, 'Az', 'i_Az', 'ii_Az')
 
 plot_accelerometer(data, smoothed)
 
-plot_column(x, 'i_Ax', type='velocity')
-plot_column(x, 'ii_Ax', type='position', est=[meta['distance'], 0])
+plot_column(smoothed, 'i_Ax', type='velocity')
+plot_column(smoothed, 'ii_Ax', type='position', est=[meta['d1']/100, meta['d2']/100, meta['d3']/100])
 # plot_column(y, 'i_Ay', name='Velocity (y)')
 # plot_column(y, 'ii_Ay', name='Position (y)')
 # plot_column(z, 'i_Az', name='Velocity (z)')

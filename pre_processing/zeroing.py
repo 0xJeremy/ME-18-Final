@@ -14,3 +14,9 @@ def remove_all_bias(data, axis):
 	for i in range(len(data_copy[axis])):
 		data_copy[axis][i] -= avg
 	return data_copy
+
+def invert(data, axis):
+	data_copy = copy.deepcopy(data)
+	for i in range(len(data_copy[axis])):
+		data_copy[axis][i] = -data_copy[axis][i]
+	return data_copy

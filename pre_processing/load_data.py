@@ -27,14 +27,13 @@ def add_time_differential(data):
 	data['delta'] = delta
 	return data
 
-def get_file_metadata(filename):
+def get_file_metadata(filename, meta):
 	f = filename.replace('.csv', '').split('_')
-	return {
-		'date': f[0],
-		'distance': int(f[1])/100,
-		'speed': f[2],
-		'trial': int(f[3])
-	}
+	data = {}
+	for i in range(len(meta)):
+		name, typ = meta[i]
+		data[name] = typ(f[i])
+	return data
 
 def cut_data(data, start, end):
 	data_copy = copy.deepcopy(data)
