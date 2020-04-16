@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 plt.style.use('dark_background')
 
 def plot_accelerometer(raw, modified=None, s=1, t=1):
@@ -123,6 +124,38 @@ def plot_column(data, column, s=1, t=1, line=False, type=None, est=None):
 	plt.grid(True, linewidth=0.1)
 
 	return axs
+
+def plot_3d(data, column, s=1, t=1, line=False, type=None, est=None):
+	if 'time' in data.keys():
+		x = data['time']
+	else:
+		x = [i for i in range(len(data[column]))]
+	fig = plt.figure()
+	axs = fig.add_subplot(111, projection='3d')
+
+	if type == 'velocity':
+		axs.set_title("Velocity")
+		axs.set_xlabel("Velocity (x, m/s)")
+		axs.set_ylabel("Velocity (y, m/s)")
+		axs.set_zlabel("Velocity (z, m/s)")
+	if type == 'position':
+		axs.set_title("Position")
+		axs.set_xlabel("Position (x, m)")
+		axs.set_ylabel("Position (y, m)")
+		axs.set_zlabel("Position (z, m)")
+	else:
+		axs.set_title('Plotting Column {}'.format(column))
+
+	axs.scatter(data[column+'x'], data[column+'y'], data[column+'z'], color='blue', s=s, label="Measured")
+	if line:
+		axs.plot(x, data[column], color='orange', linewidth=t, label="Measured")
+
+	if est is not None:
+		for item in est:
+			axs.plot(x, [item]*len(x), color="green", linewidth=t, label="Actual")
+
+	plt.legend()
+	plt.tight_layout()
 
 def show_plot():
 	plt.tight_layout()
