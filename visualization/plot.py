@@ -92,7 +92,7 @@ def plot_all(raw, modified=None, s=1, t=1):
 
 	return axs
 
-def plot_column(data, column, s=1, t=1, line=False, type=None, est=None):
+def plot_column(data, column, s=1, t=1, line=False, type=None, est=None, vert=[]):
 	if 'time' in data.keys():
 		x = data['time']
 	else:
@@ -110,6 +110,9 @@ def plot_column(data, column, s=1, t=1, line=False, type=None, est=None):
 		axs.set_title('Plotting Column {}'.format(column))
 		plt.xlabel("Time")
 		plt.ylabel("Magnitude")
+
+	for v in vert:
+		axs.axvline(v, color='red')
 
 	axs.scatter(x, data[column], color='blue', s=s, label="Measured")
 	if line:

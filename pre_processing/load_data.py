@@ -27,6 +27,15 @@ def add_time_differential(data):
 	data['delta'] = delta
 	return data
 
+def zero_time(data):
+	data_copy = copy.deepcopy(data)
+	stime = data['time'][0]
+	time = []
+	for item in data['time']:
+		time.append(item-stime)
+	data_copy['time'] = time
+	return data_copy
+
 def get_file_metadata(filename, meta):
 	f = filename.replace('.csv', '').split('_')
 	data = {}
