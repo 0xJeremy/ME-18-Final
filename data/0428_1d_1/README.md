@@ -13,27 +13,25 @@ Note: "distances(cm)" consists of the positions at which the car travels to in o
 For the current naming scheme, there will only be 4 distinct positions.
 
 1 sensor, all data (65Hz):
-0428_full_1_slow_1
-0428_full_1_slow_2
-0428_full_1_slow_3
-0428_full_1_fast_1
-0428_full_1_fast_2
-0428_full_1_fast_3
+0428_full_1_slow_1  
+0428_full_1_slow_2  
+0428_full_1_slow_3  
+0428_full_1_fast_1  
+0428_full_1_fast_2  
+0428_full_1_fast_3  
 
 2 sensors, acc only (65Hz):
-0428_acc_2_slow_1
-0428_acc_2_slow_2
-0428_acc_2_slow_3
-0428_acc_2_fast_1
-0428_acc_2_fast_2
-0428_acc_2_fast_3
+0428_acc_2_slow_1  
+0428_acc_2_slow_2  
+0428_acc_2_slow_3  
+0428_acc_2_fast_1  
+0428_acc_2_fast_2  
+0428_acc_2_fast_3  
 
 2 sensors, everything (30Hz):
-0428_full_2_slow_1
-0428_full_2_slow_2
-0428_full_2_slow_3
-0428_full_2_fast_1
-0428_full_2_fast_2
-0428_full_2_fast_3
-
-
+0428_full_2_slow_1  
+0428_full_2_slow_2  
+0428_full_2_slow_3  
+0428_full_2_fast_1  
+0428_full_2_fast_2  
+0428_full_2_fast_3  
