@@ -15,6 +15,7 @@ def plot_accelerometer(raw, modified=None, s=1, t=1):
 	axs[2].scatter(x, raw['Az'], color='blue', s=s)
 
 	if modified is not None:
+		x = [i for i in range(len(modified['Ax']))]
 		axs[0].plot(x, modified['Ax'], color='orange', linewidth=t)
 		axs[1].plot(x, modified['Ay'], color='orange', linewidth=t)
 		axs[2].plot(x, modified['Az'], color='orange', linewidth=t)
