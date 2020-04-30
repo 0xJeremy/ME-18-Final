@@ -94,7 +94,7 @@ def plot_all(raw, modified=None, s=1, t=1):
 
 def plot_column(data, column, s=1, t=1, line=False, type=None, est=None, vert=[]):
 	if 'time' in data.keys():
-		x = data['time']
+		x = data['time'][0:len(data[column])]
 	else:
 		x = [i for i in range(len(data[column]))]
 	fig, axs = plt.subplots(1)

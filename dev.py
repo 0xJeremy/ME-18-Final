@@ -11,6 +11,10 @@ from pre_processing.load_data import add_time_differential
 from pre_processing.load_data import zero_time
 from pre_processing.load_data import get_file_metadata
 from pre_processing.load_data import cut_data
+from pre_processing.load_data import cut_to_times
+from pre_processing.load_data import split_times
+from pre_processing.load_data import zip_data_no_offset
+from pre_processing.load_data import zip_data_offset
 from pre_processing.zeroing import remove_gravity_bias
 from pre_processing.zeroing import remove_all_bias
 from pre_processing.zeroing import invert
@@ -50,11 +54,27 @@ meta = get_file_metadata(FILE, META)
 data = zero_time(data)
 data = add_time_differential(data)
 
-# data = cut_data(data, 650, 800)
+def process_subset(data, start, finish):
+	tmp = cut_to_times(data, start, finish)
+	tmp = remove_all_bias(tmp, ['Ax', 'Ay', 'Az'])
+	tmp = smooth_convolution(tmp, smoothing_coefficient=5)
+	tmp = double_time_accumulation(tmp, 'Ax', 'i_Ax', 'ii_Ax')
+	return tmp
 
-data = remove_all_bias(data, 'Ax')
-data = remove_all_bias(data, 'Ay')
-data = remove_all_bias(data, 'Az')
+
+datasets = []
+times = [0, 2, 2.5, 4.45, 5.5, 10]
+for i in range(1, len(times)):
+	datasets.append(process_subset(data, times[i-1], times[i]))
+
+smoothed = zip_data_offset(datasets, ['ii_Ax', 'ii_Ay', 'ii_Az'])
+
+
+# datasets.append(cut_to_times(smoothed, 0, 2.5))
+# datasets.append(cut_to_times(smoothed, 2.5, 5.5))
+# datasets.append(cut_to_times(smoothed, 5.5, 10))
+# data = cut_to_times(data, 5.5, 10)
+# data = split_times(data, [0, 2, 5, 9])
 
 # data = invert(data, 'Ax')
 
@@ -65,30 +85,34 @@ data = remove_all_bias(data, 'Az')
 # smoothed = smooth_convolution(data, smoothing_coefficient=2)
 # smoothed = savitzky_golay_filter(data, smoothing_coefficient=5)
 # smoothed = rolling_window(data, smoothing_coefficient=100)
-smoothed = double_digital_filter(data, cutoff=0.8)
+# smoothed = double_digital_filter(data, order=5, cutoff=0.9)
 
 ############################
 ### DATA POST-PROCESSING ###
 ############################
 
+# datasets = []
+# datasets.append(cut_to_times(smoothed, 0, 2.5))
+# datasets.append(cut_to_times(smoothed, 2.5, 5.5))
+# datasets.append(cut_to_times(smoothed, 5.5, 10))
+
+# for i in range(len(datasets)):
+# 	datasets[i] = double_time_accumulation(datasets[i], 'Ax', 'i_Ax', 'ii_Ax')
+
+# smoothed = zip_data(datasets)
+
 # smoothed = remove_all_bias(smoothed, 'Ax')
 # smoothed = remove_all_bias(smoothed, 'Ay')
 # smoothed = remove_all_bias(smoothed, 'Az')
 
-smoothed = double_time_accumulation(smoothed, 'Ax', 'i_Ax', 'ii_Ax')
+# for item in datasets:
+# 	item = double_time_accumulation(item, 'Ax', 'i_Ax', 'ii_Ax')
+
+# smoothed = zip_data(datasets)
+
+# smoothed = double_time_accumulation(data, 'Ax', 'i_Ax', 'ii_Ax')
 # smoothed = double_time_accumulation(smoothed, 'Ay', 'i_Ay', 'ii_Ay')
 # smoothed = double_time_accumulation(smoothed, 'Az', 'i_Az', 'ii_Az')
-
-# smoothed = cut_data(smoothed, 780, 1000)
-
-# smoothed = rotate_data(smoothed, 'i_Ax', 780, 1000)
-
-Vxwave3 = wave3(data=smoothed['i_Ax'], mult=5, mode='hard', k1=650, k2=800)
-print(len(Vxwave3))
-print(len(smoothed['time']))
-smoothed['i_Ax'] = Vxwave3[:len(Vxwave3)-1]
-# smoothed['time'] = smoothed['time'][:len(Vxwave3)-1]
-
 
 #########################
 ### DATA VISUALZATION ###
@@ -97,7 +121,7 @@ smoothed['i_Ax'] = Vxwave3[:len(Vxwave3)-1]
 # plot_accelerometer(data, smoothed)
 
 plot_column(smoothed, 'i_Ax', type='velocity')
-# plot_column(smoothed, 'ii_Ax', type='position', est=[meta['d1']/100, meta['d2']/100, meta['d3']/100, meta['d4']/100])
+# plot_column(cut, 'i_Ax', type='velocity')
 plot_column(smoothed, 'ii_Ax', type='position', est=[meta['d1']/100, meta['d2']/100, meta['d3']/100, meta['d4']/100])
 # plot_column(y, 'i_Ay', name='Velocity (y)')
 # plot_column(y, 'ii_Ay', name='Position (y)')
