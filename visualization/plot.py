@@ -93,7 +93,7 @@ def plot_all(raw, modified=None, s=1, t=1):
 
 	return axs
 
-def plot_column(data, column, s=1, t=1, line=False, type=None, est=None, vert=[]):
+def plot_column(data, column, s=1, t=1, line=False, type=None, est=[], vert=[]):
 	if 'time' in data.keys():
 		x = data['time'][0:len(data[column])]
 	else:
@@ -113,15 +113,14 @@ def plot_column(data, column, s=1, t=1, line=False, type=None, est=None, vert=[]
 		plt.ylabel("Magnitude")
 
 	for v in vert:
-		axs.axvline(v, color='red')
+		axs.axvline(v, color='red', linewidth=t/2)
 
 	axs.scatter(x, data[column], color='blue', s=s, label="Measured")
 	if line:
 		axs.plot(x, data[column], color='orange', linewidth=t, label="Measured")
 
-	if est is not None:
-		for item in est:
-			axs.plot(x, [item]*len(x), color="green", linewidth=t, label="Actual")
+	for item in est:
+		axs.plot(x, [item]*len(x), color="green", linewidth=t, label="Actual")
 
 	plt.legend()
 	plt.tight_layout()
